@@ -1,67 +1,78 @@
 #include<iostream>
-#include<ctime>
-
-#include"EclipsesArray.h";
+#include<conio.h>
+#include"ArrEclipse.hpp"
 
 using namespace std;
 
 int main() {
-	srand(time(NULL));
+	ArrEclipse* arr1 = new ArrEclipse();
+	Eclipse* aux;
+	string visibilidad;
+	int fecha, hora,opc,pos;
+	char tipo;
+	bool sismos, lluvias;
 
-	int pos, opc;
-	int N;
-	EclipsesArray* p1;
-
-	cout << "======= Sistema de Registro de Eclipses =======" << endl;
-	cout << "\n1. Registrar Eclipse "<<endl;
-	cout << "2. Modificar Eclipse " << endl;
-	cout << "3. Eliminar Eclipse " << endl;
-	cout << "4. Reporte " << endl;
-	cout << "5. Reporte de Eclipses visibles en Europa " << endl;
-	cout << "6. Reporte de Eclipses con Sismos " << endl;
-	cout << "7. Reporte de Eclipses en la Noche " << endl;
-	cout << "0. Salir" << endl;
-	do
+	while (true)
 	{
-		cout << "\nDigite la opcion: "; cin >> opc;
-		if (opc == 1) {
-			do
-			{
-				cout << "Digite la cantidad de eclipses a registrar: "; cin >> N;
-			} while (!(N> 0));
-			
-			p1 = new EclipsesArray(N);
-			p1->generateData();
+		do
+		{
+			system("cls");
+			cout << "Lista de eclipses " << endl;
+			cout << "1. Mostrar Eclipse " << endl;
+			cout << "2. Agregar Eclipse " << endl;
+			cout << "3. Eliminar Eclipse " << endl;
+			cout << "4. Modificar Eclipse " << endl;
+			cout << "5. salir" << endl;
+			cout << "Opcion: "; cin >> opc;
+		} while (!(opc>=1 && opc<=5));
+
+		switch (opc)
+		{
+		case 1: arr1->mostrar(); break;
+		case 2:
+			cout << "Tipo: "; cin >> tipo;
+			cout << "Fecha: "; cin >> fecha;
+			cout << "Hora: "; cin >> hora;
+			cout << "Sismos: "; cin >> sismos;
+			cout << "Lluvias: "; cin >> lluvias;
+			cout << "Visibilidad: "; cin >> visibilidad;
+
+			arr1->agregarEclipse(new Eclipse(tipo, fecha, hora, sismos, lluvias, visibilidad));
+			break;
+		case 3: 
+			cout << "Ingrese la posicion a eliminar: "; cin >> pos;
+			arr1->eliminarEclipse(pos);
+			break;
+		case 4:
+			cout << "Ingrese la posicion a modificar: "; cin >> pos;
+			Eclipse* aux;
+
+			aux = arr1->get(pos);
+			cout << "Tipo: "; cin >> tipo;
+			cout << "Fecha: "; cin >> fecha;
+			cout << "Hora: "; cin >> hora;
+			cout << "Sismos: "; cin >> sismos;
+			cout << "Lluvias: "; cin >> lluvias;
+			cout << "Visibilidad: "; cin >> visibilidad;
+
+			aux->setTipo(tipo);
+			aux->setFecha(fecha);
+			aux->setHora(hora);
+			aux->setSismos(sismos);
+			aux->setLluvias(lluvias);
+			aux->setVisibilidad(visibilidad);
+			break;
+		case 5:
+			delete arr1;
+			return 0;
 		}
-		if (opc == 2) {
-			do
-			{
-				cout << "Digite el numero de Eclipse a modificar: "; cin >> pos;
+		_getch();
+	}
 
-			} while (!(pos > 0 && pos <= p1->getN() )); 
-			    p1->modifyData(pos);
-		}
-		if (opc == 3) {
-			do{
 
-			cout << "Digite el numero de Eclipse a eliminar: "; cin >> pos;
 
-			} while (!(pos > 0 && pos <= p1->getN() ));
-
-			p1->eraseDataPosition(pos);
-		}
-		if (opc == 4) {
-			p1->printData();
-		}
-		if (opc == 5) { p1->printReportEclipseEuropa();  }
-		if (opc == 6) { p1->printReportEclipseEarthquakes(); }
-		if (opc == 7) { p1->printReportEclipseNight(); }
-
-	} while (!(opc == 0));
 	
+	system("pause");
 
-	
-	cin.ignore();
-	cin.get();
 	return 0;
 }
